@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% block head %}
-    <link rel="stylesheet" href="/static/blackjack.css">
-    <link rel="preload" href="/static/svg-cards.svg" as="image" type="image/svg+xml">
+    <!-- 修正：Flask标准静态文件路径 -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='blackjack.css') }}">
+    <link rel="preload" href="{{ url_for('static', filename='svg-cards.svg') }}" as="image" type="image/svg+xml">
 {% endblock %}
 {% block main_content %}
     <div class="game-area">
@@ -9,15 +10,15 @@
             <h2>Dealer's Hand ({{ game_state['dealer_value'] }})</h2>
             <div class="cards">
                 {% if not game_state['message'] %}
-                    <!-- 欧式规则修正：庄家初始只有1张明牌，无暗牌 -->
+                    <!-- 欧式规则：庄家初始仅1张明牌 -->
                     <svg class="card" viewBox="0 0 169 244">
-                        <use href="/static/svg-cards.svg#{{ get_card_name(game_state['dealer_hand'][0]) }}"/>
+                        <use href="{{ url_for('static', filename='svg-cards.svg') }}#{{ get_card_name(game_state['dealer_hand'][0]) }}"/>
                     </svg>
                 {% else %}
-                    <!-- 游戏结束：显示庄家所有手牌（含补的第二张及后续牌） -->
+                    <!-- 游戏结束：显示庄家所有手牌 -->
                     {% for card in game_state['dealer_hand'] %}
                         <svg class="card" viewBox="0 0 169 244">
-                            <use href="/static/svg-cards.svg#{{ get_card_name(card) }}"/>
+                            <use href="{{ url_for('static', filename='svg-cards.svg') }}#{{ get_card_name(card) }}"/>
                         </svg>
                     {% endfor %}
                 {% endif %}
@@ -28,7 +29,7 @@
             <div class="cards">
                 {% for card in game_state['player_hand'] %}
                     <svg class="card" viewBox="0 0 169 244">
-                        <use href="/static/svg-cards.svg#{{ get_card_name(card) }}"/>
+                        <use href="{{ url_for('static', filename='svg-cards.svg') }}#{{ get_card_name(card) }}"/>
                     </svg>
                 {% endfor %}
             </div>
